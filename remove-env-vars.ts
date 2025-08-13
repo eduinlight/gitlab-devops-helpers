@@ -2,7 +2,7 @@
 
 import { config } from "dotenv";
 import { z } from "zod";
-config();
+config({ override: true });
 
 const envSchema = z.object({
 	GITLAB_TOKEN: z.string().min(1, "GITLAB_TOKEN is required"),
@@ -14,6 +14,8 @@ const envSchema = z.object({
 const env = envSchema.parse(process.env);
 const { GITLAB_TOKEN, GITLAB_PROJECT_ID, GITLAB_API_URL, GITLAB_ENVIRONMENT } =
 	env;
+
+console.log(env);
 
 // Function to fetch all variables for the environment with pagination support
 async function fetchEnvironmentVariables(): Promise<any[]> {
@@ -70,7 +72,7 @@ async function deleteVariable(key: string): Promise<void> {
 
 	try {
 		const response = await fetch(
-			`${GITLAB_API_URL}/projects/${GITLAB_PROJECT_ID}/variables/${encodeURIComponent(key)}`,
+			`${GITLAB_API_URL}/projects/${GITLAB_PROJECT_ID}/variables/${encodeURIComponent(key)}?filter[environment_scope]=${encodeURIComponent(GITLAB_ENVIRONMENT)}`,
 			{
 				method: "DELETE",
 				headers: {
@@ -80,6 +82,10 @@ async function deleteVariable(key: string): Promise<void> {
 		);
 
 		if (!response.ok) {
+			if (response.status === 404) {
+				console.log(`⚠️  Variable ${key} not found in environment ${GITLAB_ENVIRONMENT} - may have been already deleted`);
+				return;
+			}
 			const errorText = await response.text();
 			throw new Error(
 				`Failed to delete variable ${key}: ${response.status} ${response.statusText} - ${errorText}`,

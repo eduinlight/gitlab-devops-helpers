@@ -1,7 +1,7 @@
 #!/usr/bin/env bun
 import { config } from "dotenv";
 import { z } from "zod";
-config();
+config({ override: true });
 
 /**
  * Script to remove all pipelines from a GitLab project

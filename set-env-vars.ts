@@ -3,7 +3,7 @@
 import { readFileSync, existsSync } from "fs";
 import { config } from "dotenv";
 import { z } from "zod";
-config();
+config({ override: true });
 
 /**
  * Script to load environment variables from a JSON file
