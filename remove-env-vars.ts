@@ -83,7 +83,9 @@ async function deleteVariable(key: string): Promise<void> {
 
 		if (!response.ok) {
 			if (response.status === 404) {
-				console.log(`⚠️  Variable ${key} not found in environment ${GITLAB_ENVIRONMENT} - may have been already deleted`);
+				console.log(
+					`!  Variable ${key} not found in environment ${GITLAB_ENVIRONMENT} - may have been already deleted`,
+				);
 				return;
 			}
 			const errorText = await response.text();
