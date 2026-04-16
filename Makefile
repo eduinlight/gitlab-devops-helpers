@@ -9,7 +9,7 @@ help:
 	@echo "  make variables-prd  - Set PRD environment variables"
 
 variables-uat:
-	GITLAB_ENVIRONMENT=uat ENV_FILE_PATH=env.json bun run set-env-vars.ts
+	GITLAB_ENVIRONMENT=uat ENV_FILE_PATH=uat.env.json bun run set-env-vars.ts
 
 variables-prd:
-	GITLAB_ENVIRONMENT=prd ENV_FILE_PATH=env.json bun run set-env-vars.ts
+	GITLAB_ENVIRONMENT=prd ENV_FILE_PATH=prd.env.json bun run set-env-vars.ts
